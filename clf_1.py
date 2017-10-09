@@ -1,6 +1,6 @@
 # Detection insults in comments
 ### Winner - LogisticRegression(solver='liblinear')
-### AUC = 0.871002
+### AUC = 0.888033
 
 import pandas
 
@@ -13,8 +13,8 @@ X_test = test_data['Comment'].values
 Y_train = train_data['Insult'].values
 Y_test = test_data['Insult'].values
 
-from sklearn.feature_extraction.text import CountVectorizer
-vectorizer = CountVectorizer(min_df=1)
+from sklearn.feature_extraction.text import TfidfVectorizer
+vectorizer = TfidfVectorizer(min_df=1)
 
 X_train = vectorizer.fit_transform(X_train)
 X_test = vectorizer.transform(X_test)
@@ -32,7 +32,7 @@ prediction = clf.predict_proba(X_test)  # predict probabilities
 from sklearn.metrics import roc_auc_score
 print("#accuracy(GaussianNB) = %f" % roc_auc_score(
     Y_test, prediction[:, 1]))  # calculate area under ROC-curve
-# 0.631424
+# 0.626466
 
 from sklearn.naive_bayes import MultinomialNB
 clf = MultinomialNB()
@@ -40,7 +40,7 @@ clf.fit(X_train, Y_train)
 prediction = clf.predict_proba(X_test)
 
 print("#accuracy(MultinomialNB) = %f" %
-      roc_auc_score(Y_test, prediction[:, 1]))  # 0.830554
+      roc_auc_score(Y_test, prediction[:, 1]))  # 0.775781
 
 from sklearn.naive_bayes import BernoulliNB
 clf = BernoulliNB(alpha=1.85)
@@ -65,4 +65,4 @@ clf.fit(X_train, Y_train)
 prediction = clf.predict_proba(X_test)
 
 print("#accuracy(LogisticRegression) = %f" %
-      roc_auc_score(Y_test, prediction[:, 1]))
+      roc_auc_score(Y_test, prediction[:, 1])) # 0.888033
